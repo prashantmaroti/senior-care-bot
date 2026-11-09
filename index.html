@@ -4,76 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Senior Cancer Care Assistant</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #0056b3;
-            --light-blue: #e8f4ff;
-            --primary-green: #2e7d32;
-            --bg-color: #f0f2f5;
-            --text-dark: #1a1a1a;
-            --white: #ffffff;
-        }
-
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color); 
-            color: var(--text-dark); 
-            margin: 0; 
-            padding: 20px; 
-            font-size: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 90vh;
+            background-color: #f0f2f5; 
+            font-size: 1.15rem; /* Larger base font for accessibility */
         }
-
-        #app-wrapper {
-            width: 100%;
-            max-width: 800px;
-            background: var(--white);
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #e0e0e0;
+        
+        #chat-box { 
+            height: 450px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
         }
-
-        .header {
-            background-color: var(--primary-blue);
-            color: var(--white);
-            padding: 20px;
-            text-align: center;
+        
+        .message { 
+            max-width: 85%; 
+            line-height: 1.5; 
+            animation: fadeIn 0.3s ease-in; 
         }
-
-        .header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 600;
+        
+        .bot-msg { 
+            background-color: #e8f4ff; 
+            color: #003d82; 
+            align-self: flex-start; 
+            border-bottom-left-radius: 4px !important; 
         }
-
-        .header p {
-            margin: 5px 0 0 0;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        #chat-box {
-            padding: 25px;
-            height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background-color: #fafafa;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 18px 24px;
-            border-radius: 20px;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease-in;
+        
+        .user-msg { 
+            background-color: #0056b3; 
+            color: #ffffff; 
+            align-self: flex-end; 
+            border-bottom-right-radius: 4px !important; 
         }
 
         @keyframes fadeIn {
@@ -81,126 +44,72 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .bot { 
-            background-color: var(--light-blue); 
-            color: #003d82;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-
-        .user { 
-            background-color: var(--primary-blue); 
-            color: var(--white);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .quick-ask { 
-            padding: 20px 25px;
-            background: var(--white);
-            border-top: 1px solid #eee;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .quick-ask button { 
-            background-color: var(--white); 
-            color: var(--primary-blue); 
-            border: 2px solid var(--primary-blue); 
-            padding: 12px 20px; 
-            border-radius: 50px; 
-            font-size: 18px; 
-            font-weight: 600;
-            cursor: pointer; 
-            transition: all 0.2s; 
-        }
-
-        .quick-ask button:hover, .quick-ask button:focus { 
-            background-color: var(--primary-blue);
-            color: var(--white);
-            outline: none;
-            box-shadow: 0 4px 8px rgba(0,86,179,0.2);
-        }
-
-        #input-area { 
-            display: flex; 
-            padding: 20px 25px;
-            background: var(--white);
-            border-top: 1px solid #eee;
-        }
-
-        input { 
-            flex: 1; 
-            padding: 16px 20px; 
-            font-size: 20px; 
-            border: 2px solid #ccc; 
-            border-radius: 30px 0 0 30px; 
-            color: var(--text-dark);
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-        }
-
-        #send-btn { 
-            border-radius: 0 30px 30px 0; 
-            margin: 0; 
-            background-color: var(--primary-green); 
-            color: var(--white);
-            border: 2px solid var(--primary-green);
-            padding: 0 30px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        #send-btn:hover { 
-            background-color: #1b471e; 
-        }
-
+        /* Custom scrollbar for elegance */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #999; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
     </style>
 </head>
-<body>
-    <div id="app-wrapper">
-        <div class="header">
-            <h1>Cancer Care Helper</h1>
-            <p>Your digital companion for comfort and guidance</p>
-        </div>
-        
-        <div id="chat-box">
-            <div class="message bot">Hello. I am your digital care helper. You can ask me questions about your condition, treatment, precautions, or click a quick topic below.</div>
-        </div>
-        
-        <div class="quick-ask">
-            <button onclick="askQuestion('Chemo Side Effects')">Chemo</button>
-            <button onclick="askQuestion('Nutrition Tips')">Nutrition</button>
-            <button onclick="askQuestion('Safety Precautions')">Precautions</button>
-            <button onclick="askQuestion('When to call the doctor')">Emergency</button>
-        </div>
+<body class="d-flex align-items-center min-vh-100 py-4">
 
-        <div id="input-area">
-            <input type="text" id="user-input" placeholder="Type your question..." aria-label="Type your question">
-            <button id="send-btn" onclick="handleCustomInput()">Send</button>
+    <div class="container">
+        <div class="card shadow-lg border-0 mx-auto" style="max-width: 800px; border-radius: 1.25rem;">
+            
+            <!-- Header -->
+            <div class="card-header bg-primary text-white text-center py-4 border-0" style="border-top-left-radius: 1.25rem; border-top-right-radius: 1.25rem;">
+                <h1 class="h3 mb-1 fw-bold">Cancer Care Helper</h1>
+                <p class="mb-0 text-white-50">Your digital companion for comfort and guidance</p>
+            </div>
+            
+            <!-- Chat Box -->
+            <div class="card-body bg-light" id="chat-box">
+                <div class="message bot-msg p-3 mb-3 rounded-4 shadow-sm border">
+                    Hello. I am your digital care helper. You can type a question below, or click any of the keyword buttons to get started.
+                </div>
+            </div>
+            
+            <!-- Keywords Area -->
+            <div class="card-body bg-white border-top p-4">
+                <p class="text-center text-muted fw-bold small mb-3 text-uppercase tracking-wider">Suggested Keywords</p>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('What is cancer?')">Cancer</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Safety precautions')">Precautions</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Medication support')">Medication</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Doctor visit')">Doctor</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Chemotherapy')">Chemo</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Radiation therapy')">Radiation</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Nutrition tips')">Nutrition</button>
+                    <button class="btn btn-outline-primary rounded-pill fw-semibold px-3" onclick="askQuestion('Managing pain')">Pain</button>
+                    <button class="btn btn-outline-danger rounded-pill fw-semibold px-3" onclick="askQuestion('Emergency')">Emergency</button>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="card-footer bg-white border-0 p-4 pt-0" style="border-bottom-left-radius: 1.25rem; border-bottom-right-radius: 1.25rem;">
+                <div class="input-group input-group-lg shadow-sm">
+                    <input type="text" id="user-input" class="form-control border-secondary-subtle" placeholder="Type your question..." aria-label="Type your question">
+                    <button class="btn btn-success fw-bold px-4" id="send-btn" onclick="handleCustomInput()">Send</button>
+                </div>
+            </div>
+            
         </div>
     </div>
 
+    <!-- Bootstrap 5 JS Bundle (Includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         const chatBox = document.getElementById('chat-box');
         const userInput = document.getElementById('user-input');
 
         function addMessage(text, sender) {
             const div = document.createElement('div');
-            div.className = `message ${sender}`;
+            // Assign appropriate Bootstrap styling based on the sender
+            const senderClass = sender === 'bot' ? 'bot-msg border' : 'user-msg shadow-sm';
+            div.className = `message ${senderClass} p-3 mb-3 rounded-4`;
             div.innerText = text;
+            
             chatBox.appendChild(div);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -208,59 +117,45 @@
         function getResponse(question) {
             const lowerQ = question.toLowerCase();
             
-            // 1. Definition and Basics
             if (lowerQ.includes("what is cancer") || lowerQ === "cancer" || lowerQ.includes("tumor") || lowerQ.includes("disease") || lowerQ.includes("explain cancer")) {
                 return "Cancer is a condition where abnormal cells in the body grow and divide without control. These cells can form masses called tumors and sometimes spread to other areas. Because there are many types, treatments are personalized. Always ask your oncologist to explain the specifics of your diagnosis.";
             }
-            // 2. Precautions & Hygiene
             else if (lowerQ.includes("precaution") || lowerQ.includes("infection") || lowerQ.includes("hygiene") || lowerQ.includes("safety") || lowerQ.includes("protect")) {
                 return "During treatment, your immune system may be weakened. Key precautions include: washing your hands frequently with soap and water, avoiding large crowds and sick people, wearing a mask in public spaces, and making sure all raw fruits and vegetables are washed thoroughly before eating.";
             }
-            // 3. Medication Support
             else if (lowerQ.includes("medication") || lowerQ.includes("medicine") || lowerQ.includes("pill") || lowerQ.includes("prescription")) {
                 return "It is important to take your medications exactly as prescribed. Use a daily pill organizer to keep track. Keep an updated list of all your medications, including over-the-counter vitamins, to show your doctor. If you miss a dose or experience new side effects, contact your pharmacist or care team.";
             }
-            // 4. Doctor Visits & Communication
-            else if (lowerQ.includes("doctor visit") || lowerQ.includes("appointment") || lowerQ.includes("ask doctor") || lowerQ.includes("oncologist")) {
+            else if (lowerQ.includes("doctor visit") || lowerQ.includes("appointment") || lowerQ.includes("ask doctor") || lowerQ.includes("oncologist") || lowerQ === "doctor") {
                 return "Before your doctor appointment, write down all your questions and symptoms in a notebook. It is very helpful to bring a family member or friend to take notes for you. Do not hesitate to ask your doctor to repeat themselves or explain things in simpler terms until you fully understand.";
             }
-            // 5. Emergency / When to call the doctor
             else if (lowerQ.includes("emergency") || lowerQ.includes("call") || lowerQ.includes("fever") || lowerQ.includes("help")) {
                 return "CRITICAL: Call your doctor immediately or go to the nearest emergency room if you develop a fever over 100.4°F (38°C), experience sudden shortness of breath, have severe unmanageable pain, or cannot keep fluids down for more than 24 hours.";
             } 
-            // 6. Chemo & Side Effects
             else if (lowerQ.includes("chemo") || lowerQ.includes("nausea") || lowerQ.includes("sick") || lowerQ.includes("vomit")) {
                 return "Chemotherapy can cause nausea. To help, try eating small, frequent meals rather than large ones. Ginger tea or hard peppermint candies can sometimes settle your stomach. Tell your care team about your nausea so they can adjust your anti-nausea medication.";
             } 
-            // 7. Radiation & Skin Care
             else if (lowerQ.includes("radiation") || lowerQ.includes("skin") || lowerQ.includes("burn")) {
                 return "Radiation therapy can make your skin feel sensitive or look sunburned. Wash the area gently with warm water and pat dry—do not rub. Only use specific unscented lotions or creams that are explicitly approved by your radiation care team.";
             } 
-            // 8. Pain Management
             else if (lowerQ.includes("pain") || lowerQ.includes("hurt") || lowerQ.includes("ache")) {
                 return "Managing pain is vital for your comfort and healing. Take your prescribed pain medication on a regular schedule before the pain becomes severe. Keep a written log of when you take your medicine and how well it works to share with your doctor.";
             } 
-            // 9. Hair Loss
             else if (lowerQ.includes("hair") || lowerQ.includes("bald") || lowerQ.includes("wig")) {
                 return "Hair loss is a common side effect of certain treatments. Use a soft baby hairbrush and mild shampoo. Protect your scalp from the sun with sunscreen, and many find comfort in wearing soft caps, warm scarves, or wigs.";
             }
-            // 10. Fatigue
             else if (lowerQ.includes("fatigue") || lowerQ.includes("tired") || lowerQ.includes("sleep") || lowerQ.includes("exhausted")) {
                 return "Cancer-related fatigue is very common and different from normal tiredness. Listen to your body and rest when needed. However, engaging in light daily activity, like a 15-minute walk, can actually help improve your energy levels over time.";
             } 
-            // 11. Nutrition
             else if (lowerQ.includes("nutrition") || lowerQ.includes("food") || lowerQ.includes("eat") || lowerQ.includes("appetite") || lowerQ.includes("diet")) {
                 return "If your appetite is low, focus on high-calorie, high-protein items. Smoothies, yogurts, and nutritional shakes are often easier to consume. If foods suddenly taste metallic or bitter, try using plastic forks and spoons instead of metal ones.";
             } 
-            // 12. Emotional Support
             else if (lowerQ.includes("support") || lowerQ.includes("lonely") || lowerQ.includes("sad") || lowerQ.includes("depressed") || lowerQ.includes("cry")) {
                 return "It is completely normal to feel overwhelmed, anxious, or sad during this journey. You do not have to do this alone. Consider asking your care team to connect you with an oncology social worker, a counselor, or a local cancer support group.";
             } 
-            // 13. Greetings
             else if (lowerQ.includes("hello") || lowerQ.includes("hi") || lowerQ.includes("hey")) {
                 return "Hello! I am here to help. You can ask me about what cancer is, medications, precautions, side effects like fatigue or nausea, or how to prepare for a doctor's appointment.";
             } 
-            // Fallback
             else {
                 return "I'm sorry, I don't have specific information on that topic just yet. However, I can help you with questions about what cancer is, managing medications, safety precautions, dealing with side effects (like pain or nausea), or preparing for doctor visits. What would you like to know about?";
             }
