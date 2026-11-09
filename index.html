@@ -163,7 +163,6 @@
             background-color: #1b471e; 
         }
 
-        /* Scrollbar styling for a cleaner look */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
@@ -178,13 +177,13 @@
         </div>
         
         <div id="chat-box">
-            <div class="message bot">Hello. I am your digital care helper. You can ask me questions about your treatment, side effects, or click a quick topic below.</div>
+            <div class="message bot">Hello. I am your digital care helper. You can ask me questions about your condition, treatment, precautions, or click a quick topic below.</div>
         </div>
         
         <div class="quick-ask">
             <button onclick="askQuestion('Chemo Side Effects')">Chemo</button>
-            <button onclick="askQuestion('Managing Pain')">Pain</button>
             <button onclick="askQuestion('Nutrition Tips')">Nutrition</button>
+            <button onclick="askQuestion('Safety Precautions')">Precautions</button>
             <button onclick="askQuestion('When to call the doctor')">Emergency</button>
         </div>
 
@@ -206,39 +205,64 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Expanded logic with if/else conditions for cancer-specific FAQs
         function getResponse(question) {
             const lowerQ = question.toLowerCase();
             
-            if (lowerQ.includes("chemo") || lowerQ.includes("nausea") || lowerQ.includes("sick")) {
-                return "Chemotherapy can cause nausea and fatigue. It is helpful to eat small, frequent meals rather than large ones. Ginger tea or peppermint can sometimes settle your stomach. Always tell your care team about your nausea so they can provide medication to help.";
-            } 
-            else if (lowerQ.includes("radiation") || lowerQ.includes("skin") || lowerQ.includes("burn")) {
-                return "Radiation therapy can make your skin feel sensitive, similar to a sunburn. Wash the area gently with warm water and mild soap. Avoid rubbing, and only use specific lotions approved by your radiation oncologist.";
-            } 
-            else if (lowerQ.includes("pain") || lowerQ.includes("hurt") || lowerQ.includes("medication")) {
-                return "Managing pain is vital for your healing. Take your prescribed pain medication on a regular schedule, even if you aren't in severe pain yet. Keep a written log of when you take them to share with your doctor.";
-            } 
-            else if (lowerQ.includes("hair") || lowerQ.includes("bald") || lowerQ.includes("wig")) {
-                return "Hair loss is a common side effect of certain treatments. Use a soft hairbrush and mild shampoo. Many people find comfort in wearing soft caps to keep their head warm, or using scarves and wigs.";
+            // 1. Definition and Basics
+            if (lowerQ.includes("what is cancer") || lowerQ === "cancer" || lowerQ.includes("tumor") || lowerQ.includes("disease") || lowerQ.includes("explain cancer")) {
+                return "Cancer is a condition where abnormal cells in the body grow and divide without control. These cells can form masses called tumors and sometimes spread to other areas. Because there are many types, treatments are personalized. Always ask your oncologist to explain the specifics of your diagnosis.";
             }
-            else if (lowerQ.includes("fatigue") || lowerQ.includes("tired") || lowerQ.includes("sleep")) {
-                return "Cancer-related fatigue is very common. Listen to your body and rest when you need to. However, light activity like a short daily walk can actually help boost your energy levels.";
+            // 2. Precautions & Hygiene
+            else if (lowerQ.includes("precaution") || lowerQ.includes("infection") || lowerQ.includes("hygiene") || lowerQ.includes("safety") || lowerQ.includes("protect")) {
+                return "During treatment, your immune system may be weakened. Key precautions include: washing your hands frequently with soap and water, avoiding large crowds and sick people, wearing a mask in public spaces, and making sure all raw fruits and vegetables are washed thoroughly before eating.";
+            }
+            // 3. Medication Support
+            else if (lowerQ.includes("medication") || lowerQ.includes("medicine") || lowerQ.includes("pill") || lowerQ.includes("prescription")) {
+                return "It is important to take your medications exactly as prescribed. Use a daily pill organizer to keep track. Keep an updated list of all your medications, including over-the-counter vitamins, to show your doctor. If you miss a dose or experience new side effects, contact your pharmacist or care team.";
+            }
+            // 4. Doctor Visits & Communication
+            else if (lowerQ.includes("doctor visit") || lowerQ.includes("appointment") || lowerQ.includes("ask doctor") || lowerQ.includes("oncologist")) {
+                return "Before your doctor appointment, write down all your questions and symptoms in a notebook. It is very helpful to bring a family member or friend to take notes for you. Do not hesitate to ask your doctor to repeat themselves or explain things in simpler terms until you fully understand.";
+            }
+            // 5. Emergency / When to call the doctor
+            else if (lowerQ.includes("emergency") || lowerQ.includes("call") || lowerQ.includes("fever") || lowerQ.includes("help")) {
+                return "CRITICAL: Call your doctor immediately or go to the nearest emergency room if you develop a fever over 100.4°F (38°C), experience sudden shortness of breath, have severe unmanageable pain, or cannot keep fluids down for more than 24 hours.";
             } 
-            else if (lowerQ.includes("nutrition") || lowerQ.includes("food") || lowerQ.includes("eat") || lowerQ.includes("appetite")) {
-                return "If your appetite is low, focus on high-protein, high-calorie foods. Smoothies, yogurts, and nutritional drinks can be easier to swallow. If food tastes metallic, try using plastic utensils instead of metal ones.";
+            // 6. Chemo & Side Effects
+            else if (lowerQ.includes("chemo") || lowerQ.includes("nausea") || lowerQ.includes("sick") || lowerQ.includes("vomit")) {
+                return "Chemotherapy can cause nausea. To help, try eating small, frequent meals rather than large ones. Ginger tea or hard peppermint candies can sometimes settle your stomach. Tell your care team about your nausea so they can adjust your anti-nausea medication.";
             } 
-            else if (lowerQ.includes("support") || lowerQ.includes("lonely") || lowerQ.includes("sad")) {
-                return "It is completely normal to feel overwhelmed or sad. Connecting with a cancer support group or talking to an oncology social worker can provide great comfort. You do not have to go through this alone.";
+            // 7. Radiation & Skin Care
+            else if (lowerQ.includes("radiation") || lowerQ.includes("skin") || lowerQ.includes("burn")) {
+                return "Radiation therapy can make your skin feel sensitive or look sunburned. Wash the area gently with warm water and pat dry—do not rub. Only use specific unscented lotions or creams that are explicitly approved by your radiation care team.";
             } 
-            else if (lowerQ.includes("doctor") || lowerQ.includes("call") || lowerQ.includes("emergency") || lowerQ.includes("fever")) {
-                return "CRITICAL: Call your doctor immediately if you develop a fever over 100.4°F (38°C), experience sudden shortness of breath, have severe new pain, or cannot keep fluids down for more than 24 hours.";
+            // 8. Pain Management
+            else if (lowerQ.includes("pain") || lowerQ.includes("hurt") || lowerQ.includes("ache")) {
+                return "Managing pain is vital for your comfort and healing. Take your prescribed pain medication on a regular schedule before the pain becomes severe. Keep a written log of when you take your medicine and how well it works to share with your doctor.";
             } 
+            // 9. Hair Loss
+            else if (lowerQ.includes("hair") || lowerQ.includes("bald") || lowerQ.includes("wig")) {
+                return "Hair loss is a common side effect of certain treatments. Use a soft baby hairbrush and mild shampoo. Protect your scalp from the sun with sunscreen, and many find comfort in wearing soft caps, warm scarves, or wigs.";
+            }
+            // 10. Fatigue
+            else if (lowerQ.includes("fatigue") || lowerQ.includes("tired") || lowerQ.includes("sleep") || lowerQ.includes("exhausted")) {
+                return "Cancer-related fatigue is very common and different from normal tiredness. Listen to your body and rest when needed. However, engaging in light daily activity, like a 15-minute walk, can actually help improve your energy levels over time.";
+            } 
+            // 11. Nutrition
+            else if (lowerQ.includes("nutrition") || lowerQ.includes("food") || lowerQ.includes("eat") || lowerQ.includes("appetite") || lowerQ.includes("diet")) {
+                return "If your appetite is low, focus on high-calorie, high-protein items. Smoothies, yogurts, and nutritional shakes are often easier to consume. If foods suddenly taste metallic or bitter, try using plastic forks and spoons instead of metal ones.";
+            } 
+            // 12. Emotional Support
+            else if (lowerQ.includes("support") || lowerQ.includes("lonely") || lowerQ.includes("sad") || lowerQ.includes("depressed") || lowerQ.includes("cry")) {
+                return "It is completely normal to feel overwhelmed, anxious, or sad during this journey. You do not have to do this alone. Consider asking your care team to connect you with an oncology social worker, a counselor, or a local cancer support group.";
+            } 
+            // 13. Greetings
             else if (lowerQ.includes("hello") || lowerQ.includes("hi") || lowerQ.includes("hey")) {
-                return "Hello! I am here to help. You can ask me about chemo, radiation, pain, fatigue, nutrition, or when to call the doctor.";
+                return "Hello! I am here to help. You can ask me about what cancer is, medications, precautions, side effects like fatigue or nausea, or how to prepare for a doctor's appointment.";
             } 
+            // Fallback
             else {
-                return "I am a simple helper. Please try asking about specific topics like 'chemo', 'radiation', 'pain', 'fatigue', 'nutrition', or 'fever'.";
+                return "I'm sorry, I don't have specific information on that topic just yet. However, I can help you with questions about what cancer is, managing medications, safety precautions, dealing with side effects (like pain or nausea), or preparing for doctor visits. What would you like to know about?";
             }
         }
 
