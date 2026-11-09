@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Care Digital Helper</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --chat-bg: #ffffff;
+            --primary: #0056b3;
+            --text-main: #222222;
+            --bot-msg: #e9ecef;
+            --user-msg: #cce5ff;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--chat-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid #ccc;
+        }
+        .header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .chat-window {
+            height: 400px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-size: 20px; /* Large text for accessibility */
+        }
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+        .bot-message {
+            background-color: var(--bot-msg);
+            align-self: flex-start;
+            border: 1px solid #ccc;
+        }
+        .user-message {
+            background-color: var(--user-msg);
+            align-self: flex-end;
+            border: 1px solid #b8daff;
+        }
+        .quick-ask-container {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-top: 2px solid #eee;
+        }
+        .quick-ask-label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .quick-btn {
+            background-color: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 20px;
+            font-size: 18px; /* Large buttons */
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .quick-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        .input-area {
+            display: flex;
+            padding: 20px;
+            border-top: 2px solid #ccc;
+            background: white;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+        button.send-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button.send-btn:hover {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="header">Care Helper</div>
+    
+    <div class="chat-window" id="chatWindow">
+        <div class="message bot-message">Hello! I am your Care Helper. You can ask me questions about fatigue, nutrition, or when to call the doctor. How can I help you today?</div>
+    </div>
+
+    <div class="quick-ask-container">
+        <span class="quick-ask-label">Quick Ask:</span>
+        <div class="quick-buttons">
+            <button class="quick-btn" onclick="sendQuickAsk('fatigue')">Feeling Tired</button>
+            <button class="quick-btn" onclick="sendQuickAsk('nutrition')">What to Eat</button>
+            <button class="quick-btn" onclick="sendQuickAsk('doctor')">When to Call Doctor</button>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your question here..." onkeypress="handleKeyPress(event)">
+        <button class="send-btn" onclick="processUserInput()">Send</button>
+    </div>
+</div>
+
+<script>
+    // Static Q&A Database saved directly in the file
+    const qaDatabase = [
+        {
+            keywords: ["fatigue", "tired", "exhausted", "sleep", "weak"],
+            answer: "It is very normal to feel fatigue during treatment. Try to rest when you feel tired, take short walks if you feel up to it, and drink plenty of water. Please listen to your body and don't push yourself too hard."
+        },
+        {
+            keywords: ["nutrition", "eat", "food", "diet", "nausea", "appetite"],
+            answer: "Eating well is important for your strength. Focus on small, frequent meals high in protein. If you feel nauseous, try eating bland foods like toast or crackers, and avoid strong food smells."
+        },
+        {
+            keywords: ["doctor", "call", "emergency", "fever", "pain", "sick"],
+            answer: "Please call your doctor right away if you experience a fever of 100.4°F (38°C) or higher, sudden or severe pain, trouble breathing, or if you cannot keep liquids down for more than 24 hours."
+        }
+    ];
+
+    const fallbackAnswer = "I'm sorry, I don't have information on that specific topic. Please try asking about fatigue, nutrition, or when to call the doctor. For medical advice, always contact your healthcare provider.";
+
+    function addMessage(text, sender) {
+        const chatWindow = document.getElementById('chatWindow');
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+        messageDiv.textContent = text;
+        chatWindow.appendChild(messageDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
+    }
+
+    function processUserInput() {
+        const inputField = document.getElementById('userInput');
+        const userText = inputField.value.trim().toLowerCase();
+        
+        if (userText === "") return;
+
+        addMessage(inputField.value, 'user');
+        inputField.value = '';
+
+        // Simple keyword matching logic
+        let foundAnswer = fallbackAnswer;
+        for (let item of qaDatabase) {
+            if (item.keywords.some(keyword => userText.includes(keyword))) {
+                foundAnswer = item.answer;
+                break;
+            }
+        }
+
+        // Slight delay to make it feel like a real chat
+        setTimeout(() => {
+            addMessage(foundAnswer, 'bot');
+        }, 500);
+    }
+
+    function sendQuickAsk(topic) {
+        const inputField = document.getElementById('userInput');
+        inputField.value = topic;
+        processUserInput();
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            processUserInput();
+        }
+    }
+</script>
+
+</body>
+</html>
