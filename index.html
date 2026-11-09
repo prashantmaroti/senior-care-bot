@@ -3,218 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senior Care Digital Helper</title>
+    <title>Senior Cancer Care Assistant</title>
     <style>
         :root {
-            --bg-color: #f4f6f9;
-            --chat-bg: #ffffff;
-            --primary: #0056b3;
-            --text-main: #222222;
-            --bot-msg: #e9ecef;
-            --user-msg: #cce5ff;
+            --primary-blue: #0056b3;
+            --light-blue: #e8f4ff;
+            --primary-green: #2e7d32;
+            --bg-color: #f0f2f5;
+            --text-dark: #1a1a1a;
+            --white: #ffffff;
         }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding: 20px; 
+            font-size: 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 90vh;
         }
-        .chat-container {
+
+        #app-wrapper {
             width: 100%;
-            max-width: 600px;
-            background: var(--chat-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 800px;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            border: 2px solid #ccc;
+            border: 1px solid #e0e0e0;
         }
+
         .header {
-            background-color: var(--primary);
-            color: white;
+            background-color: var(--primary-blue);
+            color: var(--white);
             padding: 20px;
             text-align: center;
-            font-size: 24px;
-            font-weight: bold;
         }
-        .chat-window {
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        #chat-box {
+            padding: 25px;
             height: 400px;
-            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            font-size: 20px; /* Large text for accessibility */
+            background-color: #fafafa;
         }
+
         .message {
-            padding: 15px 20px;
-            border-radius: 10px;
             max-width: 80%;
-            line-height: 1.4;
+            padding: 18px 24px;
+            border-radius: 20px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in;
         }
-        .bot-message {
-            background-color: var(--bot-msg);
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot { 
+            background-color: var(--light-blue); 
+            color: #003d82;
             align-self: flex-start;
-            border: 1px solid #ccc;
+            border-bottom-left-radius: 4px;
         }
-        .user-message {
-            background-color: var(--user-msg);
+
+        .user { 
+            background-color: var(--primary-blue); 
+            color: var(--white);
             align-self: flex-end;
-            border: 1px solid #b8daff;
+            border-bottom-right-radius: 4px;
         }
-        .quick-ask-container {
-            padding: 15px 20px;
-            background-color: #f8f9fa;
-            border-top: 2px solid #eee;
-        }
-        .quick-ask-label {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .quick-buttons {
+
+        .quick-ask { 
+            padding: 20px 25px;
+            background: var(--white);
+            border-top: 1px solid #eee;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
         }
-        .quick-btn {
-            background-color: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 12px 20px;
-            font-size: 18px; /* Large buttons */
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
+
+        .quick-ask button { 
+            background-color: var(--white); 
+            color: var(--primary-blue); 
+            border: 2px solid var(--primary-blue); 
+            padding: 12px 20px; 
+            border-radius: 50px; 
+            font-size: 18px; 
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.2s; 
         }
-        .quick-btn:hover {
-            background-color: var(--primary);
-            color: white;
+
+        .quick-ask button:hover, .quick-ask button:focus { 
+            background-color: var(--primary-blue);
+            color: var(--white);
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0,86,179,0.2);
         }
-        .input-area {
-            display: flex;
-            padding: 20px;
-            border-top: 2px solid #ccc;
-            background: white;
+
+        #input-area { 
+            display: flex; 
+            padding: 20px 25px;
+            background: var(--white);
+            border-top: 1px solid #eee;
         }
-        input[type="text"] {
-            flex: 1;
-            padding: 15px;
+
+        input { 
+            flex: 1; 
+            padding: 16px 20px; 
+            font-size: 20px; 
+            border: 2px solid #ccc; 
+            border-radius: 30px 0 0 30px; 
+            color: var(--text-dark);
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        #send-btn { 
+            border-radius: 0 30px 30px 0; 
+            margin: 0; 
+            background-color: var(--primary-green); 
+            color: var(--white);
+            border: 2px solid var(--primary-green);
+            padding: 0 30px;
             font-size: 20px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            margin-right: 10px;
-        }
-        button.send-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 20px;
             font-weight: bold;
-            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
-        button.send-btn:hover {
-            background-color: #004494;
+
+        #send-btn:hover { 
+            background-color: #1b471e; 
         }
+
+        /* Scrollbar styling for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #999; }
     </style>
 </head>
 <body>
+    <div id="app-wrapper">
+        <div class="header">
+            <h1>Cancer Care Helper</h1>
+            <p>Your digital companion for comfort and guidance</p>
+        </div>
+        
+        <div id="chat-box">
+            <div class="message bot">Hello. I am your digital care helper. You can ask me questions about your treatment, side effects, or click a quick topic below.</div>
+        </div>
+        
+        <div class="quick-ask">
+            <button onclick="askQuestion('Chemo Side Effects')">Chemo</button>
+            <button onclick="askQuestion('Managing Pain')">Pain</button>
+            <button onclick="askQuestion('Nutrition Tips')">Nutrition</button>
+            <button onclick="askQuestion('When to call the doctor')">Emergency</button>
+        </div>
 
-<div class="chat-container">
-    <div class="header">Care Helper</div>
-    
-    <div class="chat-window" id="chatWindow">
-        <div class="message bot-message">Hello! I am your Care Helper. You can ask me questions about fatigue, nutrition, or when to call the doctor. How can I help you today?</div>
-    </div>
-
-    <div class="quick-ask-container">
-        <span class="quick-ask-label">Quick Ask:</span>
-        <div class="quick-buttons">
-            <button class="quick-btn" onclick="sendQuickAsk('fatigue')">Feeling Tired</button>
-            <button class="quick-btn" onclick="sendQuickAsk('nutrition')">What to Eat</button>
-            <button class="quick-btn" onclick="sendQuickAsk('doctor')">When to Call Doctor</button>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Type your question..." aria-label="Type your question">
+            <button id="send-btn" onclick="handleCustomInput()">Send</button>
         </div>
     </div>
 
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type your question here..." onkeypress="handleKeyPress(event)">
-        <button class="send-btn" onclick="processUserInput()">Send</button>
-    </div>
-</div>
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
 
-<script>
-    // Static Q&A Database saved directly in the file
-    const qaDatabase = [
-        {
-            keywords: ["fatigue", "tired", "exhausted", "sleep", "weak"],
-            answer: "It is very normal to feel fatigue during treatment. Try to rest when you feel tired, take short walks if you feel up to it, and drink plenty of water. Please listen to your body and don't push yourself too hard."
-        },
-        {
-            keywords: ["nutrition", "eat", "food", "diet", "nausea", "appetite"],
-            answer: "Eating well is important for your strength. Focus on small, frequent meals high in protein. If you feel nauseous, try eating bland foods like toast or crackers, and avoid strong food smells."
-        },
-        {
-            keywords: ["doctor", "call", "emergency", "fever", "pain", "sick"],
-            answer: "Please call your doctor right away if you experience a fever of 100.4°F (38°C) or higher, sudden or severe pain, trouble breathing, or if you cannot keep liquids down for more than 24 hours."
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.innerText = text;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
-    ];
 
-    const fallbackAnswer = "I'm sorry, I don't have information on that specific topic. Please try asking about fatigue, nutrition, or when to call the doctor. For medical advice, always contact your healthcare provider.";
-
-    function addMessage(text, sender) {
-        const chatWindow = document.getElementById('chatWindow');
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-        messageDiv.textContent = text;
-        chatWindow.appendChild(messageDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
-    }
-
-    function processUserInput() {
-        const inputField = document.getElementById('userInput');
-        const userText = inputField.value.trim().toLowerCase();
-        
-        if (userText === "") return;
-
-        addMessage(inputField.value, 'user');
-        inputField.value = '';
-
-        // Simple keyword matching logic
-        let foundAnswer = fallbackAnswer;
-        for (let item of qaDatabase) {
-            if (item.keywords.some(keyword => userText.includes(keyword))) {
-                foundAnswer = item.answer;
-                break;
+        // Expanded logic with if/else conditions for cancer-specific FAQs
+        function getResponse(question) {
+            const lowerQ = question.toLowerCase();
+            
+            if (lowerQ.includes("chemo") || lowerQ.includes("nausea") || lowerQ.includes("sick")) {
+                return "Chemotherapy can cause nausea and fatigue. It is helpful to eat small, frequent meals rather than large ones. Ginger tea or peppermint can sometimes settle your stomach. Always tell your care team about your nausea so they can provide medication to help.";
+            } 
+            else if (lowerQ.includes("radiation") || lowerQ.includes("skin") || lowerQ.includes("burn")) {
+                return "Radiation therapy can make your skin feel sensitive, similar to a sunburn. Wash the area gently with warm water and mild soap. Avoid rubbing, and only use specific lotions approved by your radiation oncologist.";
+            } 
+            else if (lowerQ.includes("pain") || lowerQ.includes("hurt") || lowerQ.includes("medication")) {
+                return "Managing pain is vital for your healing. Take your prescribed pain medication on a regular schedule, even if you aren't in severe pain yet. Keep a written log of when you take them to share with your doctor.";
+            } 
+            else if (lowerQ.includes("hair") || lowerQ.includes("bald") || lowerQ.includes("wig")) {
+                return "Hair loss is a common side effect of certain treatments. Use a soft hairbrush and mild shampoo. Many people find comfort in wearing soft caps to keep their head warm, or using scarves and wigs.";
+            }
+            else if (lowerQ.includes("fatigue") || lowerQ.includes("tired") || lowerQ.includes("sleep")) {
+                return "Cancer-related fatigue is very common. Listen to your body and rest when you need to. However, light activity like a short daily walk can actually help boost your energy levels.";
+            } 
+            else if (lowerQ.includes("nutrition") || lowerQ.includes("food") || lowerQ.includes("eat") || lowerQ.includes("appetite")) {
+                return "If your appetite is low, focus on high-protein, high-calorie foods. Smoothies, yogurts, and nutritional drinks can be easier to swallow. If food tastes metallic, try using plastic utensils instead of metal ones.";
+            } 
+            else if (lowerQ.includes("support") || lowerQ.includes("lonely") || lowerQ.includes("sad")) {
+                return "It is completely normal to feel overwhelmed or sad. Connecting with a cancer support group or talking to an oncology social worker can provide great comfort. You do not have to go through this alone.";
+            } 
+            else if (lowerQ.includes("doctor") || lowerQ.includes("call") || lowerQ.includes("emergency") || lowerQ.includes("fever")) {
+                return "CRITICAL: Call your doctor immediately if you develop a fever over 100.4°F (38°C), experience sudden shortness of breath, have severe new pain, or cannot keep fluids down for more than 24 hours.";
+            } 
+            else if (lowerQ.includes("hello") || lowerQ.includes("hi") || lowerQ.includes("hey")) {
+                return "Hello! I am here to help. You can ask me about chemo, radiation, pain, fatigue, nutrition, or when to call the doctor.";
+            } 
+            else {
+                return "I am a simple helper. Please try asking about specific topics like 'chemo', 'radiation', 'pain', 'fatigue', 'nutrition', or 'fever'.";
             }
         }
 
-        // Slight delay to make it feel like a real chat
-        setTimeout(() => {
-            addMessage(foundAnswer, 'bot');
-        }, 500);
-    }
-
-    function sendQuickAsk(topic) {
-        const inputField = document.getElementById('userInput');
-        inputField.value = topic;
-        processUserInput();
-    }
-
-    function handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            processUserInput();
+        function askQuestion(topic) {
+            addMessage(topic, 'user');
+            setTimeout(() => {
+                addMessage(getResponse(topic), 'bot');
+            }, 500);
         }
-    }
-</script>
 
+        function handleCustomInput() {
+            const text = userInput.value.trim();
+            if (text === "") return; 
+            
+            addMessage(text, 'user');
+            userInput.value = ''; 
+            
+            setTimeout(() => {
+                addMessage(getResponse(text), 'bot');
+            }, 500);
+        }
+
+        userInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                handleCustomInput();
+            }
+        });
+    </script>
 </body>
 </html>
